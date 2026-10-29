@@ -1,0 +1,22 @@
+{
+  "name": "claude-sleek",
+  "displayName": "Claude Sleek",
+  "description": "Warm, modern, minimal themes inspired by Claude: Ember (dark) and Parchment (light). Unofficial and not affiliated with Anthropic.",
+  "version": "1.0.0",
+  "publisher": "kernnull",
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": { "color": "#1c1b19", "theme": "dark" },
+  "repository": { "type": "git", "url": "https://github.com/KernNull/claude-sleek.git" },
+  "bugs": { "url": "https://github.com/KernNull/claude-sleek/issues" },
+  "homepage": "https://github.com/KernNull/claude-sleek#readme",
+  "engines": { "vscode": "^1.60.0" },
+  "categories": ["Themes"],
+  "keywords": ["theme", "color-theme", "dark", "light", "claude", "terracotta", "warm", "minimal"],
+  "contributes": {
+    "themes": [
+      { "label": "Claude Ember", "uiTheme": "vs-dark", "path": "./themes/claude-ember.json" },
+      { "label": "Claude Parchment", "uiTheme": "vs", "path": "./themes/claude-parchment.json" }
+    ]
+  }
+}

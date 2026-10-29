@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" shape-rendering="crispEdges" role="img" aria-label="Winking terminal critter">
+  <g fill="#D97757">
+    <!-- body -->
+    <rect x="20" y="34" width="88" height="58"/>
+    <!-- arms -->
+    <rect x="8" y="54" width="12" height="20"/>
+    <rect x="108" y="54" width="12" height="20"/>
+    <!-- legs -->
+    <rect x="28" y="92" width="12" height="16"/>
+    <rect x="46" y="92" width="12" height="16"/>
+    <rect x="70" y="92" width="12" height="16"/>
+    <rect x="88" y="92" width="12" height="16"/>
+  </g>
+  <g fill="#1C1B19">
+    <!-- open eye -->
+    <rect x="38" y="52" width="12" height="20"/>
+    <!-- winking eye: pixel chevron -->
+    <rect x="72" y="64" width="8" height="8"/>
+    <rect x="80" y="56" width="8" height="8"/>
+    <rect x="88" y="64" width="8" height="8"/>
+  </g>
+  <!-- sparkle -->
+  <g fill="#F0B94A">
+    <rect x="112" y="16" width="4" height="12"/>
+    <rect x="108" y="20" width="12" height="4"/>
+  </g>
+</svg>
