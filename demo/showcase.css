@@ -1,0 +1,49 @@
+/* Design tokens */
+:root {
+  --accent: #d97757;
+  --radius: 12px;
+  --space: 1.5rem;
+  --font: "Inter", system-ui, sans-serif;
+}
+
+@import url("https://fonts.example.com/inter.css");
+
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1c1b19; --fg: #ebe6dd; }
+}
+
+body.page {
+  margin: 0;
+  font: 400 16px/1.6 var(--font);
+  color: var(--fg, #2b2926);
+  background: linear-gradient(135deg, var(--bg) 0%, #161513 100%);
+}
+
+#top .title,
+.card > p:first-child::first-line {
+  font-size: calc(1rem + 1.5vw);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.card {
+  padding: var(--space);
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover { transform: translateY(-2px) scale(1.01); }
+
+a.link:not(.active)::after {
+  content: " \2192";
+  color: var(--accent) !important;
+}
+
+@keyframes pulse {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
+}
+
+input[type="text"]:focus-visible { outline: 2px solid var(--accent); }

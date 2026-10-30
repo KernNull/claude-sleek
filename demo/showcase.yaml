@@ -1,0 +1,33 @@
+# Example workflow-style config
+name: publish
+on:
+  push:
+    tags: ["v*"]
+
+env: &defaults
+  NODE_VERSION: 20
+  RETRIES: 3
+  VERBOSE: true
+  TOKEN: null
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      <<: *defaults
+      EXTRA: "quoted string"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: |
+          npm ci
+          npm run build
+      - name: Notes
+        run: >
+          This folded block
+          becomes one line.
+      - name: Publish
+        if: startsWith(github.ref, 'refs/tags/')
+        run: npx ovsx publish --pat ${{ secrets.OVSX_PAT }}
+---
+second_document: 42
