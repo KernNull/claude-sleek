@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.1
+
+### Fixed
+- Parchment: darkened the sidebar git status tints (added, deleted, untracked, conflicting) and list error/warning text, which sat just under 4.5:1 contrast.
+- Unused code (such as an unused import) now renders at the same opacity in every theme. It was very faint in Parchment.
+
+### Changed
+- The contrast checker now covers git decorations, list errors and warnings, status badges, terminal ANSI colors, symbol and test icons, and text on hover and selection backgrounds.
+- The tools write LF line endings on Windows.
+- README: the No Italics variants also remove italics from Markdown emphasis and quotes.
+
 ## 1.1.0
 
 ### Added

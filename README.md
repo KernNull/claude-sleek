@@ -19,7 +19,7 @@ Warm, modern, minimal color themes built around a terracotta accent. Three looks
 | **Claude Ember Black (No Italics)** | dark | Ember Black without italic text. |
 | **Claude Parchment (No Italics)** | light | Parchment without italic text. |
 
-The No Italics variants use exactly the same colors as their parent themes. They only drop the italics on comments, parameters, `this` / `self`, keywords such as `class`, `async` and `import`, HTML attributes and CSS pseudo-selectors. Pick them if your font has an italic style you dislike.
+The No Italics variants use exactly the same colors as their parent themes. They only drop the italics on comments, parameters, `this` / `self`, keywords such as `class`, `async` and `import`, HTML attributes, CSS pseudo-selectors, and Markdown emphasis and quotes. Pick them if your font has an italic style you dislike.
 
 ## Screenshots
 
@@ -63,7 +63,7 @@ All screenshots show the files in [`demo/`](demo) in VSCodium. Each theme is sho
 
 **VSCodium / any editor using Open VSX:** open the Extensions view and search for **Claude Sleek**.
 
-**From a VSIX:** download `claude-sleek-1.1.0.vsix` from the Releases page, then Extensions view, `...` menu, **Install from VSIX...**.
+**From a VSIX:** download `claude-sleek-1.1.1.vsix` from the Releases page, then Extensions view, `...` menu, **Install from VSIX...**.
 
 **Manually:** copy this folder into your extensions folder (`%USERPROFILE%\.vscode-oss\extensions\` for VSCodium, `~/.vscode/extensions/` for VS Code) and restart.
 

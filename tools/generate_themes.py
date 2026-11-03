@@ -41,6 +41,8 @@ LIGHT = dict(
     teal="#127f72", rose="#b8386a",
     ansi=["#2b2926", "#c93a45", "#4a7a2e", "#9c6600", "#1d6ba5", "#7d47b0", "#127f72", "#6f695f"],
     ansiB=["#6a645a", "#cf5059", "#5a8641", "#a37112", "#3d80b2", "#8f61bb", "#25897d", "#8a8478"],
+    # slightly darker status tints so file names stay at 4.5:1 on the sidebar
+    gitAdded="#46742c", gitDeleted="#bd3741", gitUntracked="#11766a", gitConflict="#905e00",
 )
 
 # (file stem, label, base type, palette, italics?)
@@ -98,6 +100,7 @@ def workbench_colors(p):
         "editor.snippetTabstopHighlightBackground": a + "26",
         "editor.snippetFinalTabstopHighlightBorder": a + "88",
         "editorLink.activeForeground": a,
+        "editorUnnecessaryCode.opacity": "#000000b0",
         "editorWhitespace.foreground": p["border"],
         "editorIndentGuide.background1": p["border"],
         "editorIndentGuide.activeBackground1": p["gutter"],
@@ -208,8 +211,8 @@ def workbench_colors(p):
         "list.focusBackground": a + "26",
         "list.focusOutline": "#00000000",
         "list.highlightForeground": a,
-        "list.errorForeground": p["red"],
-        "list.warningForeground": p["gold"],
+        "list.errorForeground": p.get("gitDeleted", p["red"]),
+        "list.warningForeground": p.get("gitConflict", p["gold"]),
         "list.dropBackground": a + "22",
         "tree.indentGuidesStroke": p["border"],
 
@@ -347,14 +350,14 @@ def workbench_colors(p):
         "minimapGutter.deletedBackground": p["red"],
 
         # git
-        "gitDecoration.addedResourceForeground": p["green"],
+        "gitDecoration.addedResourceForeground": p.get("gitAdded", p["green"]),
         "gitDecoration.modifiedResourceForeground": p["blue"],
-        "gitDecoration.deletedResourceForeground": p["red"],
-        "gitDecoration.untrackedResourceForeground": p["teal"],
+        "gitDecoration.deletedResourceForeground": p.get("gitDeleted", p["red"]),
+        "gitDecoration.untrackedResourceForeground": p.get("gitUntracked", p["teal"]),
         "gitDecoration.ignoredResourceForeground": p["faint"],
-        "gitDecoration.conflictingResourceForeground": p["gold"],
+        "gitDecoration.conflictingResourceForeground": p.get("gitConflict", p["gold"]),
         "gitDecoration.stageModifiedResourceForeground": p["blue"],
-        "gitDecoration.stageDeletedResourceForeground": p["red"],
+        "gitDecoration.stageDeletedResourceForeground": p.get("gitDeleted", p["red"]),
 
         # debug
         "debugToolBar.background": p["raised"],
@@ -643,7 +646,8 @@ def main():
     contributes = []
     for stem, label, ttype, pal, italics in THEMES:
         path = THEMES_DIR / f"{stem}.json"
-        path.write_text(json.dumps(build(label, ttype, pal, italics), indent=2) + "\n", encoding="utf-8")
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(build(label, ttype, pal, italics), indent=2) + "\n")
         contributes.append({
             "label": label,
             "uiTheme": "vs-dark" if ttype == "dark" else "vs",
@@ -653,7 +657,8 @@ def main():
     pkg_path = ROOT / "package.json"
     pkg = json.loads(pkg_path.read_text(encoding="utf-8"))
     pkg.setdefault("contributes", {})["themes"] = contributes
-    pkg_path.write_text(json.dumps(pkg, indent=2) + "\n", encoding="utf-8")
+    with open(pkg_path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps(pkg, indent=2) + "\n")
     print("updated package.json themes list")
 
 

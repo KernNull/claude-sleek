@@ -68,6 +68,7 @@
     "editor.snippetTabstopHighlightBackground": "#d9775726",
     "editor.snippetFinalTabstopHighlightBorder": "#d9775788",
     "editorLink.activeForeground": "#d97757",
+    "editorUnnecessaryCode.opacity": "#000000b0",
     "editorWhitespace.foreground": "#2e2b27",
     "editorIndentGuide.background1": "#2e2b27",
     "editorIndentGuide.activeBackground1": "#7d766a",

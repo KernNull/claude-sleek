@@ -1,0 +1,10 @@
+.git/**
+.gitignore
+.gitattributes
+images/**
+demo/**
+tools/**
+assets/**
+**/__pycache__/**
+*.vsix
+commit-message.txt
