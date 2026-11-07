@@ -5,6 +5,7 @@ Run from the repo root:  python tools/generate_themes.py
 Edit the palettes below, regenerate, then run tools/check_contrast.py.
 """
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -43,6 +44,8 @@ LIGHT = dict(
     ansiB=["#6a645a", "#cf5059", "#5a8641", "#a37112", "#3d80b2", "#8f61bb", "#25897d", "#8a8478"],
     # slightly darker status tints so file names stay at 4.5:1 on the sidebar
     gitAdded="#46742c", gitDeleted="#bd3741", gitUntracked="#11766a", gitConflict="#905e00",
+    # the matched-text highlight in the suggest list needs a darker tone on its selected row
+    suggestHi="#a04024",
 )
 
 # (file stem, label, base type, palette, italics?)
@@ -154,7 +157,7 @@ def workbench_colors(p):
         "editorSuggestWidget.border": p["border"],
         "editorSuggestWidget.foreground": p["fg"],
         "editorSuggestWidget.selectedBackground": a + "26",
-        "editorSuggestWidget.highlightForeground": a,
+        "editorSuggestWidget.highlightForeground": p.get("suggestHi", p["accentHi"]),
         "editorHoverWidget.background": p["raised"],
         "editorHoverWidget.border": p["border"],
         "editorHoverWidget.statusBarBackground": p["hover"],
@@ -640,27 +643,48 @@ def build(label, ttype, p, italics):
         "tokenColors": tokens,
     }
 
+def render(obj):
+    return json.dumps(obj, indent=2) + "\n"
 
 def main():
-    THEMES_DIR.mkdir(exist_ok=True)
+    check = "--check" in sys.argv[1:]
+    expected = {}
     contributes = []
     for stem, label, ttype, pal, italics in THEMES:
-        path = THEMES_DIR / f"{stem}.json"
-        with open(path, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(json.dumps(build(label, ttype, pal, italics), indent=2) + "\n")
+        expected[THEMES_DIR / f"{stem}.json"] = render(build(label, ttype, pal, italics))
         contributes.append({
             "label": label,
             "uiTheme": "vs-dark" if ttype == "dark" else "vs",
             "path": f"./themes/{stem}.json",
         })
-        print("wrote", path.relative_to(ROOT))
     pkg_path = ROOT / "package.json"
     pkg = json.loads(pkg_path.read_text(encoding="utf-8"))
-    pkg.setdefault("contributes", {})["themes"] = contributes
-    with open(pkg_path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(json.dumps(pkg, indent=2) + "\n")
-    print("updated package.json themes list")
 
+    if check:
+        stale = []
+        for path, text in expected.items():
+            if not path.exists() or path.read_bytes().replace(b"\r\n", b"\n") != text.encode("utf-8"):
+                stale.appened(path.relative_to(ROOT))
+        for path in sorted(THEMES_DIR.glob("*.json")):
+            if path not in expected:
+                stale.append(path.relative_to(ROOT)) # a theme file the script doesn't produce
+        if pkg.get("contributes", {}).get("themes") != contributes:
+            stale.append(pkg_path.relative_to(ROOT))
+        for p in stale:
+            print("out of date:", p)
+            print("\nGenerated files are up to date." if not stale else
+                    "\nRun: python tools/generate_themes.py")
+            sys.exit(1 if stale else 0)
+
+    THEMES_DIR.mkdir(exist_ok=True)
+    for path, text in expected.items():
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(text)
+        print("wrote", path.relative_to(ROOT))
+    pkg.setdefault("contrributes", {}) ["themes"] = contributes
+    with open(pkg_path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(render(pkg))
+    print("updated package.json themes list")
 
 if __name__ == "__main__":
     main()

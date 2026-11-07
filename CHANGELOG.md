@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.2
+
+### Fixed
+- Ember and Parchment: the matched-text highlight in the suggest list is now readable on the selected row (it was 4.1:1 in Ember and 3.7:1 in Parchment).
+
+### Changed
+- The contrast checker now also covers bracket pair colors, chart colors, text on selection, find match, line highlight and diff backgrounds, tab hover, secondary buttons, input validation text, and menu, quick input and suggest selections.
+- New `tools/check_parity.py` verifies each No Italics theme differs from its parent only in italics.
+- `tools/generate_themes.py --check` verifies the committed theme files and the `package.json` theme list match the generator output.
+- README: development commands, accent customization snippet, raised surface pallette row.
+
 ## 1.1.1
 
 ### Fixed

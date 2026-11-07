@@ -84,11 +84,24 @@ Then press `Ctrl+K Ctrl+T` and pick a theme.
 }
 ```
 
+## Customize the accent
+
+Swap the terracotta for another color without editing the theme:
+
+```json
+{
+  "workbench.colorCutomizations": {
+    "[Claude Ember]": { "button.background": "#7fb0dc", "tab.activeBorderTop": "#7fb0dc" }
+  }
+}
+```
+
 ## Palette
 
 | Role | Ember | Parchment |
 | --- | --- | --- |
 | Background | `#1c1b19` (Black: `#000000`) | `#faf9f5` |
+| Raised surfaces | `#24221f` (Black: `#141211`) | `#f5f3ec` |
 | Accent | `#d97757` | `#b84d30` |
 | Keywords | `#e48a6c` | `#b84d2d` |
 | Strings | `#abc58c` | `#4a7a2e` |
@@ -105,8 +118,10 @@ The `demo/` folder has small sample files (Python, JavaScript, Markdown, JSON, Y
 The theme files are generated from the palettes in one script, so a color change is a one-line edit:
 
 ```
-python tools/generate_themes.py   # rebuild themes/ and the theme list in package.json
-python tools/check_contrast.py    # check every theme for valid colors and readable contrast
+python tools/generate_themes.py         # rebuild themes/ and the theme list in package.json
+python tools/generate_themes.py --check # fail if the committed files differ from the script's output
+python tools/check_contrast.py          # check every theme for valid colors and readable contrast
+python tools/check_parity.py            # check each No Italics theme matches its parent
 ```
 
 ## Feedback

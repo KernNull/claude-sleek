@@ -4,7 +4,7 @@
 Run from the repo root:  python tools/check_contrast.py
 Exits with status 1 if anything fails, so it can run in CI.
 
-Targets: 4.5:1 for text, 3:1 for icons and line numbers, 4:1 for bright ANSI colors.
+Targets: 4.5:1 for text, 3:1 for icons, charts and line numbers, 4:1 for bright ANSI colors.
 """
 import json
 import re
@@ -34,6 +34,45 @@ def over(fg, bg):
     f = [int(fg[i:i + 2], 16) for i in (0, 2, 4)]
     b = [int(bg.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)]
     return "#%02x%02x%02x" % tuple(round(x * alpha + y * (1 - alpha)) for x, y in zip(f, b))
+
+
+def extra_pairs(c):
+    """Yield (label, foreground, background, minimum ratio): the 1.1.2 additions."""
+    editor = c["editor.background"]
+    fg = c["editor.foreground"]
+
+    # bracket pair colors are text, so they get the text threshold
+    for i in range(1, 7):
+        yield f"bracket color {i}", c[f"editorBracketHighlight.foreground{i}"], editor, 4.5
+    yield "unexpected bracket", c["editorBracketHighlight.unexpectedBracket.foreground"], editor, 4.5
+
+    # chart colors are graphical, so 3:1
+    for n in ["orange", "red", "green", "blue", "yellow", "purple"]:
+        yield f"charts.{n}", c[f"charts.{n}"], editor, 3.0
+
+    # editor text on translucent highlights
+    yield "text on selection", fg, over(c["editor.selectionBackground"], editor), 4.5
+    yield "text on find match", fg, over(c["editor.findMatchBackground"], editor), 4.5
+    yield "text on line highlight", fg, over(c["editor.lineHighlightBackground"], editor), 4.5
+    yield "text on inserted diff", fg, over(c["diffEditor.insertedTextBackground"], over(c["diffEditor.insertedLineBackground"], editor)), 4.5
+    yield "text on removed diff", fg, over(c["diffEditor.removedTextBackground"], over(c["diffEditor.removedLineBackground"], editor)), 4.5
+    yield "terminal text on selection", c["terminal.foreground"], over(c["terminal.selectionBackground"], c["terminal.background"]), 4.5
+
+    # tabs and buttons
+    yield "tab hover", c["tab.hoverForeground"], c["tab.hoverBackground"], 4.5
+    yield "secondary button", c["button.secondaryForeground"], c["button.secondaryBackground"], 4.5
+    yield "secondary button hover", c["button.secondaryForeground"], c["button.secondaryHoverBackground"], 4.5
+
+    # input text on validation tints
+    inp = c["input.background"]
+    for kind in ("error", "warning", "info"):
+        yield f"input {kind} text", c["input.foreground"], over(c[f"inputValidation.{kind}Background"], inp), 4.5
+
+    # menus, quick input and suggest widget selections
+    yield "menu selection", c["menu.selectionForeground"], over(c["menu.selectionBackground"], c["menu.background"]), 4.5
+    yield "quick input focus", c["quickInputList.focusForeground"], over(c["quickInputList.focusBackground"], c["quickInput.background"]), 4.5
+    yield "suggest selection", c["editorSuggestWidget.foreground"], over(c["editorSuggestWidget.selectedBackground"], c["editorSuggestWidget.background"]), 4.5
+    yield "suggest highlight on selection", c["editorSuggestWidget.highlightForeground"], over(c["editorSuggestWidget.selectedBackground"], c["editorSuggestWidget.background"]), 4.5
 
 
 def pairs_for(c):
@@ -122,7 +161,7 @@ def main():
                 problems.append(f"syntax {fg} ({tok.get('name') or tok['scope'][0]}) = {ratio(fg, bg):.2f}")
 
         # 3. UI pairs
-        for label, fg, back, minimum in pairs_for(c):
+        for label, fg, back, minimum in list(pairs_for(c)) + list(extra_pairs(c)):
             r = ratio(fg[:7], back[:7])
             if r < minimum:
                 problems.append(f"{label}: {r:.2f} < {minimum}")

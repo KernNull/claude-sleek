@@ -118,7 +118,7 @@
     "editorSuggestWidget.border": "#e2ded1",
     "editorSuggestWidget.foreground": "#2b2926",
     "editorSuggestWidget.selectedBackground": "#b84d3026",
-    "editorSuggestWidget.highlightForeground": "#b84d30",
+    "editorSuggestWidget.highlightForeground": "#a04024",
     "editorHoverWidget.background": "#f5f3ec",
     "editorHoverWidget.border": "#e2ded1",
     "editorHoverWidget.statusBarBackground": "#ebe8dd",
