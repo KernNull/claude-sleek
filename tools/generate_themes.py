@@ -664,7 +664,7 @@ def main():
         stale = []
         for path, text in expected.items():
             if not path.exists() or path.read_bytes().replace(b"\r\n", b"\n") != text.encode("utf-8"):
-                stale.appened(path.relative_to(ROOT))
+                stale.append(path.relative_to(ROOT))
         for path in sorted(THEMES_DIR.glob("*.json")):
             if path not in expected:
                 stale.append(path.relative_to(ROOT)) # a theme file the script doesn't produce
@@ -672,16 +672,16 @@ def main():
             stale.append(pkg_path.relative_to(ROOT))
         for p in stale:
             print("out of date:", p)
-            print("\nGenerated files are up to date." if not stale else
-                    "\nRun: python tools/generate_themes.py")
-            sys.exit(1 if stale else 0)
+        print("\nGenerated files are up to date." if not stale else
+                "\nRun: python tools/generate_themes.py")
+        sys.exit(1 if stale else 0)
 
     THEMES_DIR.mkdir(exist_ok=True)
     for path, text in expected.items():
         with open(path, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(text)
         print("wrote", path.relative_to(ROOT))
-    pkg.setdefault("contrributes", {}) ["themes"] = contributes
+    pkg.setdefault("contributes", {}) ["themes"] = contributes
     with open(pkg_path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(render(pkg))
     print("updated package.json themes list")
