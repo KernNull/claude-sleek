@@ -63,7 +63,7 @@ All screenshots show the files in [`demo/`](demo) in VSCodium. Each theme is sho
 
 **VSCodium / any editor using Open VSX:** open the Extensions view and search for **Claude Sleek**.
 
-**From a VSIX:** download `claude-sleek-1.1.1.vsix` from the Releases page, then Extensions view, `...` menu, **Install from VSIX...**.
+**From a VSIX:** download `claude-sleek-1.1.3.vsix` from the Releases page, then Extensions view, `...` menu, **Install from VSIX...**.
 
 **Manually:** copy this folder into your extensions folder (`%USERPROFILE%\.vscode-oss\extensions\` for VSCodium, `~/.vscode/extensions/` for VS Code) and restart.
 
@@ -90,7 +90,7 @@ Swap the terracotta for another color without editing the theme:
 
 ```json
 {
-  "workbench.colorCutomizations": {
+  "workbench.colorCustomizations": {
     "[Claude Ember]": { "button.background": "#7fb0dc", "tab.activeBorderTop": "#7fb0dc" }
   }
 }

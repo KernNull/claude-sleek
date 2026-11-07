@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.3
+
+### Fixed
+- `tools/generate_themes.py --check` no longer crashes on out-of-date files, and now exists without regenerating when everything is current
+- The generator wrote the theme list to a misspelled `contrributes` key, leaving a duplicate block in `package.json`. The stray block is removed.
+- README: the accent customization example used a misspelled setting name (`colorCutomizations`) and silently did nothing. The VSIX filename is also updated.
+- CHANGELOG: typo.
+
+No theme colors changed in this release.
+
 ## 1.1.2
 
 ### Fixed
@@ -9,7 +19,7 @@
 - The contrast checker now also covers bracket pair colors, chart colors, text on selection, find match, line highlight and diff backgrounds, tab hover, secondary buttons, input validation text, and menu, quick input and suggest selections.
 - New `tools/check_parity.py` verifies each No Italics theme differs from its parent only in italics.
 - `tools/generate_themes.py --check` verifies the committed theme files and the `package.json` theme list match the generator output.
-- README: development commands, accent customization snippet, raised surface pallette row.
+- README: development commands, accent customization snippet, raised surface palette row.
 
 ## 1.1.1
 

@@ -2,7 +2,7 @@
   "name": "claude-sleek",
   "displayName": "Claude Sleek",
   "description": "Warm, modern, minimal themes inspired by Claude: Ember (dark), Ember Black (OLED) and Parchment (light), each with a no-italics variant. Unofficial and not affiliated with Anthropic.",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "publisher": "kernnull",
   "license": "MIT",
   "icon": "icon.png",
@@ -38,40 +38,6 @@
     "no italics"
   ],
   "contributes": {
-    "themes": [
-      {
-        "label": "Claude Ember",
-        "uiTheme": "vs-dark",
-        "path": "./themes/claude-ember.json"
-      },
-      {
-        "label": "Claude Ember Black",
-        "uiTheme": "vs-dark",
-        "path": "./themes/claude-ember-black.json"
-      },
-      {
-        "label": "Claude Parchment",
-        "uiTheme": "vs",
-        "path": "./themes/claude-parchment.json"
-      },
-      {
-        "label": "Claude Ember (No Italics)",
-        "uiTheme": "vs-dark",
-        "path": "./themes/claude-ember-no-italics.json"
-      },
-      {
-        "label": "Claude Ember Black (No Italics)",
-        "uiTheme": "vs-dark",
-        "path": "./themes/claude-ember-black-no-italics.json"
-      },
-      {
-        "label": "Claude Parchment (No Italics)",
-        "uiTheme": "vs",
-        "path": "./themes/claude-parchment-no-italics.json"
-      }
-    ]
-  },
-  "contrributes": {
     "themes": [
       {
         "label": "Claude Ember",
