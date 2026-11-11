@@ -1,3 +1,5 @@
+@import url("https://fonts.example.com/inter.css");
+
 /* Design tokens */
 :root {
   --accent: #d97757;
@@ -5,8 +7,6 @@
   --space: 1.5rem;
   --font: "Inter", system-ui, sans-serif;
 }
-
-@import url("https://fonts.example.com/inter.css");
 
 @media (prefers-color-scheme: dark) {
   :root { --bg: #1c1b19; --fg: #ebe6dd; }
