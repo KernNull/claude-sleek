@@ -1,12 +1,23 @@
 # Changelog
 
+## 1.1.4
+
+### Fixed
+- CHANGELOG: the 1.1.3 entry said `--check` "exists" without regenerating. It should say "exits". The vague "typo" line now says what was fixed.
+- `demo/showcase.json` still reported version 1.1.0. It now matches the package version.
+- `demo/showcase.css`: the `@import` rule now comes first, as CSS requires. It followed the `:root` block before, so editors could flag it.
+- `.gitignore` now ignores `commit-message.txt`, which `.vscodeignore` already excluded from the package.
+- README: the accent customization example only applies to Claude Ember. It now explains that each variant needs its own key.
+
+No theme colors changed in this release.
+
 ## 1.1.3
 
 ### Fixed
-- `tools/generate_themes.py --check` no longer crashes on out-of-date files, and now exists without regenerating when everything is current
+- `tools/generate_themes.py --check` no longer crashes on out-of-date files, and now exits without regenerating when everything is current
 - The generator wrote the theme list to a misspelled `contrributes` key, leaving a duplicate block in `package.json`. The stray block is removed.
 - README: the accent customization example used a misspelled setting name (`colorCutomizations`) and silently did nothing. The VSIX filename is also updated.
-- CHANGELOG: typo.
+- CHANGELOG: corrected "exists" to "exits" in the `--check` entry above.
 
 No theme colors changed in this release.
 
