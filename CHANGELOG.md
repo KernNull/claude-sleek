@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.0.0
+
+The biggest release so far: two High Contrast themes, much wider language and interface coverage, and CI that keeps releases honest.
+
+**Nothing was renamed.** All six existing themes keep their names, so any `workbench.colorCustomizations` or `workbench.colorTheme` setting keeps working. Syntax and UI colors are unchanged except where listed under Changed.
+
+### Added
+- **Claude Ember High Contrast** and **Claude Parchment High Contrast**: brighter text and syntax (7:1 contrast, up from 4.5:1), brighter terminal colors, and outlined widgets through `contrastBorder` / `contrastActiveBorder`. They contain no italics.
+- Syntax colors for more languages: TypeScript primitive types and type operators, Python keyword arguments and string prefixes, Rust attributes and std functions, Go packages, C/C++ preprocessor directives and built-in types, Java/Kotlin imports and generics, PHP, Ruby symbols and instance variables, shell options and positional parameters, TOML and INI sections, SQL table and database names, Dockerfile instructions, XML namespaces, diff file headers, and regular expression quantifiers, anchors and classes.
+- Semantic token colors for built-in functions and methods (`function.defaultLibrary`, `method.defaultLibrary`) and for rust-analyzer tokens (lifetimes, attributes, derives, built-in types, `self`, format specifiers).
+- Interface coverage for newer VS Code features: source control graph and history, merge editor, inline chat, multi-cursor, light bulbs, Unicode highlights, inlay hint kinds, problems icons, debug console, debug icons and token values, tab selection, toolbars, banners, ports, search editor, comments widget, list filter matches, tree tables, and drop targets.
+- `demo/` sample files for TypeScript, Rust, Go, C++, Java, PHP, Ruby, shell, SQL, TOML, INI, XML, Dockerfile and diff.
+- `.github/workflows/ci.yml`: runs every check on each push and pull request.
+- `.github/workflows/release.yml`: on a `v*` tag, runs every check, builds the VSIX and creates a GitHub release. It publishes to Open VSX and the VS Code Marketplace only if the `OVSX_PAT` / `VSCE_PAT` repository secrets exist.
+- `tools/check_keys.py`: every theme must define the same UI keys, semantic tokens and syntax rules.
+- `tools/check_release.py`: `package.json`, the newest CHANGELOG entry, the README VSIX filename, `demo/showcase.json` and the README theme list must agree (and the git tag, in the release workflow).
+
+### Changed
+- Terminal ANSI black in Ember and Ember Black is now a visible warm gray (`#6d675c`, 3:1). It was about 1.2:1 on Ember and 1.5:1 on Ember Black, so text printed in black was nearly invisible. Parchment is unchanged.
+- Built-in functions and methods that a language server marks as such (`print`, `len`, `console.log`) now use the teal built-in color instead of the function color, matching what Python's syntax rules already did.
+- `engines.vscode` is now `^1.65.0`, the first version with a High Contrast Light theme type.
+- `tools/check_contrast.py` checks ANSI black and the new interface colors, and holds High Contrast themes to 7:1 for text.
+- `tools/check_parity.py` skips High Contrast themes and verifies they contain no italics.
+- README: High Contrast themes, accent presets, release steps, updated palette and development commands.
+
+### Notes
+- The newer interface keys come from the VS Code theme color reference as I know it. VS Code ignores keys it does not recognize, and an editor with JSON schema validation underlines any it does not know.
+
 ## 1.1.4
 
 ### Fixed
