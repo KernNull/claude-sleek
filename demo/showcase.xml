@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Theme manifest, used to show off XML colors. -->
+<manifest xmlns="https://example.com/ns" xmlns:meta="https://example.com/meta" version="2.0.0">
+  <theme id="ember" meta:mode="dark">
+    <name>Claude Ember</name>
+    <accent hex="#d97757"/>
+    <description><![CDATA[Warm & minimal <charcoal>]]></description>
+  </theme>
+  <theme id="parchment" meta:mode="light">
+    <name>Claude Parchment</name>
+    <accent hex="#b84d30"/>
+  </theme>
+</manifest>

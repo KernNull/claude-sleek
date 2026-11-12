@@ -1,0 +1,21 @@
+# Project config, used to show off TOML colors.
+title = "Claude Sleek"
+version = "2.0.0"
+private = false
+ratio = 4.5
+released = 2026-11-12T09:00:00Z
+
+[colors]
+accent = "#d97757"
+themes = ["ember", "ember-black", "parchment"]
+
+[tool.checks]
+contrast = { text = 4.5, icons = 3.0 }
+
+[[themes]]
+name = "Claude Ember"
+dark = true
+
+[[themes]]
+name = "Claude Parchment"
+dark = false
