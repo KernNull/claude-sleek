@@ -1,8 +1,8 @@
 {
   "name": "claude-sleek",
   "displayName": "Claude Sleek",
-  "description": "Warm, modern, minimal themes inspired by Claude: Ember (dark), Ember Black (OLED) and Parchment (light), each with a no-italics variant. Unofficial and not affiliated with Anthropic.",
-  "version": "1.1.4",
+  "description": "Warm, modern, minimal themes inspired by Claude: Ember (dark), Ember Black (OLED) and Parchment (light), each with a no-italics variant, plus High Contrast versions of Ember and Parchment. Unofficial and not affiliated with Anthropic.",
+  "version": "2.0.0",
   "publisher": "kernnull",
   "license": "MIT",
   "icon": "icon.png",
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/KernNull/claude-sleek#readme",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.65.0"
   },
   "categories": [
     "Themes"
@@ -35,7 +35,9 @@
     "minimal",
     "oled",
     "black",
-    "no italics"
+    "no italics",
+    "high contrast",
+    "accessibility"
   ],
   "contributes": {
     "themes": [
@@ -68,6 +70,16 @@
         "label": "Claude Parchment (No Italics)",
         "uiTheme": "vs",
         "path": "./themes/claude-parchment-no-italics.json"
+      },
+      {
+        "label": "Claude Ember High Contrast",
+        "uiTheme": "hc-black",
+        "path": "./themes/claude-ember-high-contrast.json"
+      },
+      {
+        "label": "Claude Parchment High Contrast",
+        "uiTheme": "hc-light",
+        "path": "./themes/claude-parchment-high-contrast.json"
       }
     ]
   }
