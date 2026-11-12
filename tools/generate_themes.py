@@ -22,7 +22,8 @@ DARK = dict(
     prop="#d9c3ac", param="#ecb99d", op="#c2b8a8",
     red="#ef7a7d", green="#a6c987", gold="#e8c27a", blue="#7fb0dc", violet="#c3a1e8",
     teal="#7ccfc0", rose="#ec8fa5",
-    ansi=["#2e2b27", "#ef7a7d", "#a6c987", "#e8c27a", "#7fb0dc", "#c3a1e8", "#7ccfc0", "#cfc8bb"],
+    # ANSI black is lifted to a visible warm gray (3:1) so text printed in "black" is not invisible
+    ansi=["#6d675c", "#ef7a7d", "#a6c987", "#e8c27a", "#7fb0dc", "#c3a1e8", "#7ccfc0", "#cfc8bb"],
     ansiB=["#8a8376", "#f59a9c", "#bddca1", "#f3d596", "#a0c6ea", "#d5baf0", "#9ce0d3", "#f4efe6"],
 )
 
@@ -48,6 +49,34 @@ LIGHT = dict(
     suggestHi="#a04024",
 )
 
+# High contrast: true black, brighter text and syntax (7:1 for text), brighter terminal colors.
+HC_DARK = dict(
+    bg="#000000", deep="#000000", raised="#0b0a09", hover="#1a1816", border="#575147",
+    fg="#fbf8f1", dim="#e4ded2", faint="#cdc6b9", gutter="#aea79a", comment="#bdb6a9", punct="#d2cbbd",
+    accent="#f08a6a", accentHi="#ffa388", onAccent="#000000", shadow="#000000",
+    kw="#ff9b7a", str="#c3de9f", num="#d9bdf5", fn="#f7d9a6", type="#a9cfef",
+    prop="#ecd8c2", param="#f5cdb5", op="#ddd5c5",
+    red="#ff9496", green="#bfe09c", gold="#f2d08c", blue="#9cc7ee", violet="#d6b7f2",
+    teal="#94e0d2", rose="#f5a3b8",
+    ansi=["#8a8478", "#ff9496", "#bfe09c", "#f2d08c", "#9cc7ee", "#d6b7f2", "#94e0d2", "#e8e2d6"],
+    ansiB=["#b3ac9f", "#ffb1b3", "#d2edb5", "#f9e0a8", "#b8d9f5", "#e6cffa", "#b0eee2", "#ffffff"],
+    hcBorder="#b8b1a4", hcActive="#f08a6a",
+)
+
+# High contrast light: near-white paper, ink-dark text, deep terracotta accent.
+HC_LIGHT = dict(
+    bg="#fffdf8", deep="#fffdf8", raised="#f7f4ea", hover="#ebe6d8", border="#b5ae9f",
+    fg="#14120f", dim="#3a362f", faint="#4a463e", gutter="#5c574d", comment="#524d44", punct="#4a463e",
+    accent="#8c2f14", accentHi="#6e220d", onAccent="#fffdf8", shadow="#00000033",
+    kw="#8c2f14", str="#245a0f", num="#5a2a8c", fn="#6b4200", type="#0b4f80",
+    prop="#4d3a28", param="#7a3516", op="#4a443a",
+    red="#a3202c", green="#245a0f", gold="#6b4200", blue="#0b4f80", violet="#5a2a8c",
+    teal="#0a5c52", rose="#8f1f4c",
+    ansi=["#14120f", "#a3202c", "#245a0f", "#6b4200", "#0b4f80", "#5a2a8c", "#0a5c52", "#4a443a"],
+    ansiB=["#4a463e", "#b3202e", "#2d6a17", "#7a4c00", "#145a91", "#6a3a9c", "#116a5f", "#5c574d"],
+    hcBorder="#8c2f14", hcActive="#14120f",
+)
+
 # (file stem, label, base type, palette, italics?)
 THEMES = [
     ("claude-ember", "Claude Ember", "dark", DARK, True),
@@ -56,7 +85,12 @@ THEMES = [
     ("claude-ember-no-italics", "Claude Ember (No Italics)", "dark", DARK, False),
     ("claude-ember-black-no-italics", "Claude Ember Black (No Italics)", "dark", BLACK, False),
     ("claude-parchment-no-italics", "Claude Parchment (No Italics)", "light", LIGHT, False),
+    ("claude-ember-high-contrast", "Claude Ember High Contrast", "hc", HC_DARK, False),
+    ("claude-parchment-high-contrast", "Claude Parchment High Contrast", "hcLight", HC_LIGHT, False),
 ]
+
+# the uiTheme value package.json needs for each theme type
+UI_THEME = {"dark": "vs-dark", "light": "vs", "hc": "hc-black", "hcLight": "hc-light"}
 
 
 # ----------------------------------------------------------------------------
@@ -78,6 +112,8 @@ def workbench_colors(p):
         "textCodeBlock.background": p["raised"],
         "textBlockQuote.background": p["raised"],
         "textBlockQuote.border": a,
+        "textPreformat.foreground": p["str"],
+        "textPreformat.background": p["raised"],
         "textSeparator.foreground": p["border"],
         "sash.hoverBorder": a,
 
@@ -87,6 +123,10 @@ def workbench_colors(p):
         "editorLineNumber.foreground": p["gutter"],
         "editorLineNumber.activeForeground": a,
         "editorCursor.foreground": a,
+        "editorMultiCursor.primary.foreground": a,
+        "editorMultiCursor.secondary.foreground": p["gold"],
+        "editor.compositionBorder": a,
+        "editor.linkedEditingBackground": a + "22",
         "editor.selectionBackground": a + "38",
         "editor.inactiveSelectionBackground": a + "20",
         "editor.selectionHighlightBackground": a + "22",
@@ -104,6 +144,11 @@ def workbench_colors(p):
         "editor.snippetFinalTabstopHighlightBorder": a + "88",
         "editorLink.activeForeground": a,
         "editorUnnecessaryCode.opacity": "#000000b0",
+        "editorUnicodeHighlight.border": p["gold"],
+        "editorUnicodeHighlight.background": p["gold"] + "1f",
+        "editorLightBulb.foreground": p["gold"],
+        "editorLightBulbAutoFix.foreground": p["blue"],
+        "editorLightBulbAi.foreground": p["violet"],
         "editorWhitespace.foreground": p["border"],
         "editorIndentGuide.background1": p["border"],
         "editorIndentGuide.activeBackground1": p["gutter"],
@@ -111,11 +156,16 @@ def workbench_colors(p):
         "editorCodeLens.foreground": p["faint"],
         "editorInlayHint.foreground": p["faint"],
         "editorInlayHint.background": p["raised"],
+        "editorInlayHint.typeForeground": p["faint"],
+        "editorInlayHint.typeBackground": p["raised"],
+        "editorInlayHint.parameterForeground": p["faint"],
+        "editorInlayHint.parameterBackground": p["raised"],
         "editorGhostText.foreground": p["gutter"],
         "editorBracketMatch.background": a + "30",
         "editorBracketMatch.border": "#00000000",
         "editorBracketHighlight.unexpectedBracket.foreground": p["red"],
         "editorOverviewRuler.border": "#00000000",
+        "editorOverviewRuler.bracketMatchForeground": a + "88",
         "editorOverviewRuler.errorForeground": p["red"],
         "editorOverviewRuler.warningForeground": p["gold"],
         "editorOverviewRuler.infoForeground": p["blue"],
@@ -132,6 +182,9 @@ def workbench_colors(p):
         "editorGutter.addedBackground": p["green"],
         "editorGutter.deletedBackground": p["red"],
         "editorGutter.foldingControlForeground": p["dim"],
+        "editorGutter.commentRangeForeground": p["gutter"],
+        "editorCommentsWidget.resolvedBorder": p["gutter"],
+        "editorCommentsWidget.unresolvedBorder": a,
         "editorGroup.border": p["border"],
         "editorGroup.dropBackground": a + "22",
         "editorGroupHeader.tabsBackground": p["deep"],
@@ -143,6 +196,7 @@ def workbench_colors(p):
         "editorStickyScrollHover.background": p["hover"],
         "editorStickyScroll.border": p["border"],
         "editorStickyScroll.shadow": p["shadow"],
+        "editorStickyScrollGutter.background": p["raised"],
         "sideBarStickyScroll.background": p["deep"],
         "sideBarStickyScroll.border": p["border"],
         "panelStickyScroll.background": p["bg"],
@@ -159,6 +213,7 @@ def workbench_colors(p):
         "editorSuggestWidget.selectedBackground": a + "26",
         "editorSuggestWidget.highlightForeground": p.get("suggestHi", p["accentHi"]),
         "editorHoverWidget.background": p["raised"],
+        "editorHoverWidget.foreground": p["fg"],
         "editorHoverWidget.border": p["border"],
         "editorHoverWidget.statusBarBackground": p["hover"],
         "editorActionList.background": p["raised"],
@@ -166,6 +221,7 @@ def workbench_colors(p):
         "editorActionList.focusBackground": a + "26",
         "peekView.border": a,
         "peekViewEditor.background": p["deep"],
+        "peekViewEditorGutter.background": p["deep"],
         "peekViewEditor.matchHighlightBackground": p["gold"] + "44",
         "peekViewResult.background": p["raised"],
         "peekViewResult.selectionBackground": a + "26",
@@ -186,6 +242,9 @@ def workbench_colors(p):
         "merge.incomingHeaderBackground": p["green"] + "55",
         "merge.currentContentBackground": p["blue"] + "1e",
         "merge.incomingContentBackground": p["green"] + "1e",
+        "mergeEditor.change.background": p["green"] + "26",
+        "mergeEditor.change.word.background": p["green"] + "3a",
+        "mergeEditor.conflictingLines.background": p["gold"] + "26",
 
         # activity bar / side bar
         "activityBar.background": p["deep"],
@@ -193,12 +252,15 @@ def workbench_colors(p):
         "activityBar.inactiveForeground": p["gutter"],
         "activityBar.border": "#00000000",
         "activityBar.activeBorder": a,
+        "activityBar.activeFocusBorder": a,
+        "activityBar.dropBorder": a,
         "activityBar.activeBackground": "#00000000",
         "activityBarBadge.background": a,
         "activityBarBadge.foreground": p["onAccent"],
         "sideBar.background": p["deep"],
         "sideBar.foreground": p["dim"],
         "sideBar.border": "#00000000",
+        "sideBar.dropBackground": a + "22",
         "sideBarTitle.foreground": p["fg"],
         "sideBarSectionHeader.background": "#00000000",
         "sideBarSectionHeader.foreground": p["dim"],
@@ -214,16 +276,24 @@ def workbench_colors(p):
         "list.focusBackground": a + "26",
         "list.focusOutline": "#00000000",
         "list.highlightForeground": a,
+        "list.filterMatchBackground": p["gold"] + "33",
+        "list.filterMatchBorder": p["gold"] + "88",
         "list.errorForeground": p.get("gitDeleted", p["red"]),
         "list.warningForeground": p.get("gitConflict", p["gold"]),
         "list.dropBackground": a + "22",
         "tree.indentGuidesStroke": p["border"],
+        "tree.inactiveIndentGuidesStroke": p["border"],
+        "tree.tableColumnsBorder": p["border"],
+        "tree.tableOddRowsBackground": p["hover"] + "44",
 
         # tabs / breadcrumbs
         "tab.activeBackground": p["bg"],
         "tab.activeForeground": p["fg"],
         "tab.activeBorderTop": a,
         "tab.activeBorder": "#00000000",
+        "tab.selectedBackground": p["bg"],
+        "tab.selectedForeground": p["fg"],
+        "tab.selectedBorderTop": a,
         "tab.inactiveBackground": p["deep"],
         "tab.inactiveForeground": p["faint"],
         "tab.hoverBackground": p["hover"],
@@ -251,6 +321,7 @@ def workbench_colors(p):
         "commandCenter.border": p["border"],
         "commandCenter.activeBackground": p["hover"],
         "commandCenter.activeForeground": p["fg"],
+        "commandCenter.debuggingBackground": a + "55",
         "menubar.selectionBackground": p["hover"],
         "menubar.selectionForeground": p["fg"],
         "menu.background": p["raised"],
@@ -259,6 +330,11 @@ def workbench_colors(p):
         "menu.selectionForeground": p["fg"],
         "menu.separatorBackground": p["border"],
         "menu.border": p["border"],
+        "toolbar.hoverBackground": p["hover"],
+        "toolbar.activeBackground": p["border"],
+        "banner.background": p["raised"],
+        "banner.foreground": p["fg"],
+        "banner.iconForeground": a,
 
         # status bar
         "statusBar.background": p["deep"],
@@ -268,6 +344,7 @@ def workbench_colors(p):
         "statusBar.debuggingBackground": a,
         "statusBar.debuggingForeground": p["onAccent"],
         "statusBarItem.hoverBackground": p["hover"],
+        "statusBarItem.compactHoverBackground": p["hover"],
         "statusBarItem.remoteBackground": a,
         "statusBarItem.remoteForeground": p["onAccent"],
         "statusBarItem.prominentBackground": p["hover"],
@@ -279,11 +356,15 @@ def workbench_colors(p):
         # panel
         "panel.background": p["bg"],
         "panel.border": p["border"],
+        "panel.dropBorder": a,
         "panelTitle.activeForeground": p["fg"],
         "panelTitle.inactiveForeground": p["faint"],
         "panelTitle.activeBorder": a,
         "panelSectionHeader.background": p["deep"],
         "panelInput.border": p["border"],
+        "problemsErrorIcon.foreground": p["red"],
+        "problemsWarningIcon.foreground": p["gold"],
+        "problemsInfoIcon.foreground": p["blue"],
 
         # inputs / buttons
         "input.background": p["raised"],
@@ -309,6 +390,7 @@ def workbench_colors(p):
         "button.secondaryForeground": p["fg"],
         "button.secondaryHoverBackground": p["border"],
         "checkbox.background": p["raised"],
+        "checkbox.foreground": p["fg"],
         "checkbox.border": p["border"],
         "badge.background": a,
         "badge.foreground": p["onAccent"],
@@ -352,7 +434,7 @@ def workbench_colors(p):
         "minimapGutter.modifiedBackground": p["blue"],
         "minimapGutter.deletedBackground": p["red"],
 
-        # git
+        # git / source control
         "gitDecoration.addedResourceForeground": p.get("gitAdded", p["green"]),
         "gitDecoration.modifiedResourceForeground": p["blue"],
         "gitDecoration.deletedResourceForeground": p.get("gitDeleted", p["red"]),
@@ -361,11 +443,42 @@ def workbench_colors(p):
         "gitDecoration.conflictingResourceForeground": p.get("gitConflict", p["gold"]),
         "gitDecoration.stageModifiedResourceForeground": p["blue"],
         "gitDecoration.stageDeletedResourceForeground": p.get("gitDeleted", p["red"]),
+        "gitDecoration.submoduleResourceForeground": p["violet"],
+        "scm.historyItemAdditionsForeground": p.get("gitAdded", p["green"]),
+        "scm.historyItemDeletionsForeground": p.get("gitDeleted", p["red"]),
+        "scm.historyItemStatisticsBorder": p["border"],
+        "scmGraph.historyItemRefColor": p["blue"],
+        "scmGraph.historyItemRemoteRefColor": p["violet"],
+        "scmGraph.historyItemBaseRefColor": p["teal"],
+        "scmGraph.foreground1": a,
+        "scmGraph.foreground2": p["gold"],
+        "scmGraph.foreground3": p["blue"],
+        "scmGraph.foreground4": p["green"],
+        "scmGraph.foreground5": p["violet"],
 
         # debug
         "debugToolBar.background": p["raised"],
         "debugIcon.breakpointForeground": p["red"],
         "debugIcon.startForeground": p["green"],
+        "debugIcon.continueForeground": p["green"],
+        "debugIcon.pauseForeground": p["blue"],
+        "debugIcon.stopForeground": p["red"],
+        "debugIcon.disconnectForeground": p["red"],
+        "debugIcon.restartForeground": p["green"],
+        "debugIcon.stepOverForeground": p["blue"],
+        "debugIcon.stepIntoForeground": p["blue"],
+        "debugIcon.stepOutForeground": p["blue"],
+        "debugIcon.stepBackForeground": p["blue"],
+        "debugConsole.errorForeground": p["red"],
+        "debugConsole.warningForeground": p["gold"],
+        "debugConsole.infoForeground": p["blue"],
+        "debugConsole.sourceForeground": p["dim"],
+        "debugTokenExpression.name": p["prop"],
+        "debugTokenExpression.value": p["fg"],
+        "debugTokenExpression.string": p["str"],
+        "debugTokenExpression.number": p["num"],
+        "debugTokenExpression.boolean": p["num"],
+        "debugTokenExpression.error": p["red"],
         "editor.stackFrameHighlightBackground": p["gold"] + "28",
         "editor.focusedStackFrameHighlightBackground": p["green"] + "28",
 
@@ -376,6 +489,8 @@ def workbench_colors(p):
         "terminal.inactiveSelectionBackground": a + "20",
         "terminal.findMatchBackground": p["gold"] + "55",
         "terminal.hoverHighlightBackground": a + "18",
+        "terminal.dropBackground": a + "22",
+        "terminal.initialHintForeground": p["faint"],
         "terminalCursor.foreground": a,
         "terminal.tab.activeBorder": a,
         "terminalCommandDecoration.defaultBackground": p["gutter"],
@@ -383,6 +498,7 @@ def workbench_colors(p):
         "terminalCommandDecoration.errorBackground": p["red"],
         "terminalOverviewRuler.cursorForeground": a + "99",
         "terminalOverviewRuler.findMatchForeground": p["gold"] + "99",
+        "ports.iconRunningProcessForeground": p["green"],
 
         # settings editor
         "settings.headerForeground": p["fg"],
@@ -404,6 +520,10 @@ def workbench_colors(p):
         "settings.focusedRowBorder": a + "55",
         "settings.rowHoverBackground": p["hover"] + "88",
         "settings.settingsHeaderHoverForeground": a,
+
+        # search editor
+        "searchEditor.findMatchBackground": p["gold"] + "33",
+        "searchEditor.textInputBorder": p["border"],
 
         # notebooks
         "notebook.editorBackground": p["bg"],
@@ -436,7 +556,7 @@ def workbench_colors(p):
         "testing.peekBorder": p["red"],
         "testing.peekHeaderBackground": p["raised"],
 
-        # chat panel
+        # chat panel + inline chat
         "chat.requestBackground": p["raised"],
         "chat.requestBorder": p["border"],
         "chat.requestBubbleBackground": p["raised"],
@@ -448,19 +568,40 @@ def workbench_colors(p):
         "chat.linesAddedForeground": p["green"],
         "chat.linesRemovedForeground": p["red"],
         "chat.editedFileForeground": p["gold"],
+        "inlineChat.background": p["raised"],
+        "inlineChat.foreground": p["fg"],
+        "inlineChat.border": p["border"],
+        "inlineChat.shadow": p["shadow"],
+        "inlineChat.regionHighlight": a + "14",
+        "inlineChatInput.background": p["bg"],
+        "inlineChatInput.border": p["border"],
+        "inlineChatInput.focusBorder": a,
+        "inlineChatInput.placeholderForeground": p["faint"],
+        "inlineChatDiff.inserted": p["green"] + "22",
+        "inlineChatDiff.removed": p["red"] + "22",
 
         # misc
         "extensionButton.prominentBackground": a,
         "extensionButton.prominentForeground": p["onAccent"],
         "extensionButton.prominentHoverBackground": p["accentHi"],
+        "extensionBadge.remoteBackground": a,
+        "extensionBadge.remoteForeground": p["onAccent"],
         "extensionIcon.starForeground": p["gold"],
         "extensionIcon.verifiedForeground": p["teal"],
         "welcomePage.tileBackground": p["raised"],
         "welcomePage.tileHoverBackground": p["hover"],
         "walkThrough.embeddedEditorBackground": p["raised"],
+        "charts.foreground": p["fg"],
+        "charts.lines": p["faint"],
         "charts.orange": a, "charts.red": p["red"], "charts.green": p["green"],
         "charts.blue": p["blue"], "charts.yellow": p["gold"], "charts.purple": p["violet"],
     }
+
+    # high contrast themes outline widgets with these (they must NOT exist in the other themes,
+    # where VS Code would draw the borders too)
+    if "hcBorder" in p:
+        ui["contrastBorder"] = p["hcBorder"]
+        ui["contrastActiveBorder"] = p["hcActive"]
 
     # bracket pair colors + softened guides (the active guide used to be loud)
     brackets = [a, p["gold"], p["blue"], p["green"], p["violet"], p["teal"]]
@@ -597,6 +738,68 @@ def token_colors(p):
         t(["variable.css", "variable.argument.css", "variable.scss", "variable.other.less", "variable.parameter.url.css"], teal, "", "CSS variables"),
         t(["keyword.control.at-rule", "punctuation.definition.keyword.css", "punctuation.definition.keyword.scss"], kw, "italic", "CSS at-rules"),
         t(["keyword.other.important.css"], rose, ""),
+
+        # ---- 2.0: more languages ----
+        # TypeScript / JavaScript
+        t(["support.type.primitive", "support.type.builtin"], ty, "", "TS primitive types"),
+        t(["keyword.operator.type", "keyword.operator.type.annotation", "keyword.operator.optional"], op, ""),
+
+        # Python
+        t(["variable.parameter.function-call.python"], par, "", "Python keyword arguments"),
+        t(["storage.type.string.python"], kw, ""),
+
+        # Rust
+        t(["meta.attribute.rust", "support.function.std.rust"], teal, "", "Rust attributes & std"),
+        t(["entity.name.module.rust"], ty, ""),
+
+        # Go
+        t(["entity.name.package.go"], teal, "", "Go packages"),
+
+        # C / C++
+        t(["keyword.control.directive", "punctuation.definition.directive", "entity.name.function.preprocessor"], teal, "", "C preprocessor"),
+        t(["storage.type.built-in", "storage.type.primitive", "support.type.built-in", "entity.name.scope-resolution"], ty, "", "C/C++ built-in types"),
+
+        # Java / Kotlin / C#
+        t(["storage.modifier.import", "storage.modifier.package"], var, ""),
+        t(["storage.type.generic", "storage.type.object.array"], ty, ""),
+
+        # PHP
+        t(["variable.other.php"], var, ""),
+        t(["punctuation.definition.variable.php"], punct, ""),
+        t(["support.other.namespace.php"], ty, ""),
+
+        # Ruby
+        t(["constant.other.symbol.ruby", "constant.other.symbol.hashkey.ruby", "punctuation.definition.constant.ruby"], gold, "", "Ruby symbols"),
+        t(["variable.other.readwrite.instance.ruby", "variable.other.readwrite.class.ruby", "variable.other.readwrite.global.ruby", "punctuation.definition.variable.ruby"], rose, "", "Ruby instance variables"),
+
+        # Shell
+        t(["variable.parameter.positional.shell", "variable.language.special.shell"], gold, ""),
+        t(["constant.other.option", "constant.other.option.dash"], par, "", "Shell options"),
+
+        # TOML / INI
+        t(["entity.name.section.group-title.ini", "entity.name.tag.toml", "support.type.property-name.table.toml", "support.type.property-name.array.toml", "entity.other.attribute-name.table.toml", "entity.other.attribute-name.table.array.toml"], acc, "", "TOML / INI sections"),
+        t(["keyword.other.definition.ini", "support.type.property-name.toml"], prop, ""),
+
+        # SQL
+        t(["constant.other.table-name", "constant.other.database-name"], ty, "", "SQL names"),
+
+        # Dockerfile
+        t(["keyword.other.special-method.dockerfile"], kw, "", "Dockerfile instructions"),
+        t(["entity.name.type.base-image.dockerfile", "entity.name.image.dockerfile"], ty, ""),
+
+        # XML
+        t(["entity.name.tag.namespace.xml", "entity.other.attribute-name.namespace.xml"], ty, "", "XML namespaces"),
+        t(["meta.tag.preprocessor.xml", "meta.tag.preprocessor.xml entity.name.tag"], p["faint"], ""),
+
+        # diff files
+        t(["meta.diff.header.from-file", "meta.diff.header.to-file", "punctuation.definition.from-file.diff", "punctuation.definition.to-file.diff"], p["violet"], "", "Diff file headers"),
+        t(["meta.diff.index"], p["faint"], ""),
+
+        # regular expressions
+        t(["keyword.operator.quantifier.regexp"], gold, "", "Regex quantifiers"),
+        t(["keyword.control.anchor.regexp", "keyword.operator.or.regexp"], kw, ""),
+        t(["punctuation.definition.group.regexp", "support.other.parenthesis.regexp"], punct, ""),
+        t(["constant.other.character-class.set.regexp", "punctuation.definition.character-class.regexp"], teal, ""),
     ]
 
 
@@ -606,6 +809,8 @@ def semantic_colors(p):
         "class": ty, "interface": ty, "enum": ty, "struct": ty, "typeParameter": ty,
         "type": ty, "namespace": ty,
         "function": fn, "method": fn, "macro": p["teal"],
+        "function.defaultLibrary": p["teal"],
+        "method.defaultLibrary": p["teal"],
         "parameter": {"foreground": par, "italic": True},
         "variable": p["fg"],
         "variable.readonly": p["gold"],
@@ -615,6 +820,12 @@ def semantic_colors(p):
         "decorator": p["teal"],
         "selfParameter": {"foreground": p["rose"], "italic": True},
         "*.deprecated": {"strikethrough": True},
+        # rust-analyzer
+        "builtinType": ty, "typeAlias": ty, "union": ty, "generic": ty, "selfTypeKeyword": ty,
+        "selfKeyword": {"foreground": p["rose"], "italic": True},
+        "lifetime": p["teal"], "attribute": p["teal"], "derive": p["teal"], "deriveHelper": p["teal"],
+        "formatSpecifier": p["teal"], "escapeSequence": p["teal"],
+        "boolean": p["num"], "character": p["str"],
     }
 
 
@@ -654,7 +865,7 @@ def main():
         expected[THEMES_DIR / f"{stem}.json"] = render(build(label, ttype, pal, italics))
         contributes.append({
             "label": label,
-            "uiTheme": "vs-dark" if ttype == "dark" else "vs",
+            "uiTheme": UI_THEME[ttype],
             "path": f"./themes/{stem}.json",
         })
     pkg_path = ROOT / "package.json"

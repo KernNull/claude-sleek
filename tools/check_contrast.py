@@ -4,7 +4,8 @@
 Run from the repo root:  python tools/check_contrast.py
 Exits with status 1 if anything fails, so it can run in CI.
 
-Targets: 4.5:1 for text, 3:1 for icons, charts and line numbers, 4:1 for bright ANSI colors.
+Targets: 4.5:1 for text, 3:1 for icons, charts, line numbers and ANSI black, 4:1 for bright ANSI colors.
+High contrast themes (type "hc" / "hcLight") must clear a stricter bar: 7:1, 4.5:1 and 6:1 respectively.
 """
 import json
 import re
@@ -13,6 +14,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 HEX = re.compile(r"^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$")
+
+HC_TYPES = ("hc", "hcLight")
+HC_SCALE = {4.5: 7.0, 4.0: 6.0, 3.0: 4.5}
+
+
+def need(minimum, hc):
+    """The minimum ratio for a check, raised for high contrast themes."""
+    return HC_SCALE.get(minimum, minimum) if hc else minimum
 
 
 def lum(h):
@@ -73,6 +82,32 @@ def extra_pairs(c):
     yield "quick input focus", c["quickInputList.focusForeground"], over(c["quickInputList.focusBackground"], c["quickInput.background"]), 4.5
     yield "suggest selection", c["editorSuggestWidget.foreground"], over(c["editorSuggestWidget.selectedBackground"], c["editorSuggestWidget.background"]), 4.5
     yield "suggest highlight on selection", c["editorSuggestWidget.highlightForeground"], over(c["editorSuggestWidget.selectedBackground"], c["editorSuggestWidget.background"]), 4.5
+
+
+def v2_pairs(c):
+    """Yield (label, foreground, background, minimum ratio): the 2.0.0 additions."""
+    editor = c["editor.background"]
+    side = c["sideBar.background"]
+    panel = c["panel.background"]
+
+    # problems icons are graphical
+    for kind in ("Error", "Warning", "Info"):
+        yield f"problems {kind.lower()} icon", c[f"problems{kind}Icon.foreground"], panel, 3.0
+
+    # debug console text sits on the panel
+    for kind in ("error", "warning", "info", "source"):
+        yield f"debug console {kind}", c[f"debugConsole.{kind}Foreground"], panel, 4.5
+
+    # source control text on the sidebar
+    for k in ("scm.historyItemAdditionsForeground", "scm.historyItemDeletionsForeground",
+              "gitDecoration.submoduleResourceForeground"):
+        yield k, c[k], side, 4.5
+
+    yield "terminal hint", c["terminal.initialHintForeground"], c["terminal.background"], 4.5
+    yield "preformatted text", c["textPreformat.foreground"], c["textPreformat.background"], 4.5
+    yield "banner text", c["banner.foreground"], c["banner.background"], 4.5
+    yield "ANSI black", c["terminal.ansiBlack"], c["terminal.background"], 3.0
+    yield "light bulb", c["editorLightBulb.foreground"], editor, 3.0
 
 
 def pairs_for(c):
@@ -143,6 +178,7 @@ def main():
         theme = json.loads(path.read_text(encoding="utf-8"))
         c = theme["colors"]
         bg = c["editor.background"]
+        hc = theme["type"] in HC_TYPES
         problems = []
 
         # 1. every color must be a valid hex value
@@ -154,17 +190,17 @@ def main():
             if fg and not HEX.match(fg):
                 problems.append(f"invalid token color {fg}")
 
-        # 2. syntax colors against the editor background (4.5:1)
+        # 2. syntax colors against the editor background (4.5:1, or 7:1 for high contrast)
         for tok in theme["tokenColors"]:
             fg = tok["settings"].get("foreground")
-            if fg and ratio(fg, bg) < 4.5:
+            if fg and ratio(fg, bg) < need(4.5, hc):
                 problems.append(f"syntax {fg} ({tok.get('name') or tok['scope'][0]}) = {ratio(fg, bg):.2f}")
 
         # 3. UI pairs
-        for label, fg, back, minimum in list(pairs_for(c)) + list(extra_pairs(c)):
+        for label, fg, back, minimum in list(pairs_for(c)) + list(extra_pairs(c)) + list(v2_pairs(c)):
             r = ratio(fg[:7], back[:7])
-            if r < minimum:
-                problems.append(f"{label}: {r:.2f} < {minimum}")
+            if r < need(minimum, hc):
+                problems.append(f"{label}: {r:.2f} < {need(minimum, hc)}")
 
         status = "FAIL" if problems else "ok"
         print(f"{status:4} {theme['name']}")

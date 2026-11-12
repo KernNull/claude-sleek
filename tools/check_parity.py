@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Check that each No Italics theme differs from its parent only in italics.
+"""Check that each No Italics theme differs from its parent only in italics,
+and that the High Contrast themes contain no italics at all.
 
 Run from the repo root:  python tools/check_parity.py
 Exits with status 1 if a variant has drifted, so it can run in CI.
@@ -11,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 THEMES = ROOT / "themes"
 SUFFIX = "-no-italics"
+HC_SUFFIX = "-high-contrast"
 
 
 def load(path):
@@ -65,10 +67,24 @@ def compare(parent, variant):
     return problems
 
 
+def no_italics(theme):
+    """Problems for a theme that must not contain italics at all (High Contrast)."""
+    problems = []
+    for i, tok in enumerate(theme["tokenColors"]):
+        if "italic" in tok["settings"].get("fontStyle", ""):
+            problems.append(f"token rule {i} ({tok.get('name') or tok['scope'][0]}): italic")
+    for k, v in theme["semanticTokenColors"].items():
+        if isinstance(v, dict) and v.get("italic"):
+            problems.append(f"semantic token {k}: italic")
+    return problems
+
+
 def main():
     failures = 0
     variants = sorted(THEMES.glob(f"*{SUFFIX}.json"))
-    parents = {p.stem for p in THEMES.glob("*.json") if not p.stem.endswith(SUFFIX)}
+    high_contrast = sorted(THEMES.glob(f"*{HC_SUFFIX}.json"))
+    parents = {p.stem for p in THEMES.glob("*.json")
+               if not p.stem.endswith((SUFFIX, HC_SUFFIX))}
 
     for v in variants:
         parent_stem = v.stem[: -len(SUFFIX)]
@@ -87,6 +103,14 @@ def main():
     for stem in sorted(parents):
         print(f"FAIL {stem}.json: no No Italics variant")
         failures += 1
+
+    for h in high_contrast:
+        theme = load(h)
+        problems = no_italics(theme)
+        print(f"{'FAIL' if problems else 'ok':4} {theme['name']} (no italics)")
+        for p in problems:
+            print("       -", p)
+        failures += len(problems)
 
     print("\nAll variants match their parents." if not failures else f"\n{failures} problem(s) found.")
     sys.exit(1 if failures else 0)
