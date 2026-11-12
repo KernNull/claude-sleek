@@ -1,0 +1,44 @@
+name: Release
+
+# Push a tag like v2.0.0 to run every check, build the VSIX, and create a GitHub release.
+# Publishing to Open VSX / the VS Code Marketplace happens only if the matching secret exists.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Checks
+        run: |
+          python tools/generate_themes.py --check
+          python tools/check_contrast.py
+          python tools/check_parity.py
+          python tools/check_keys.py
+          python tools/check_release.py --tag "$GITHUB_REF_NAME"
+      - name: Package
+        run: npx --yes @vscode/vsce@3 package
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" ./*.vsix --title "$GITHUB_REF_NAME" --generate-notes
+      - name: Publish to Open VSX
+        if: env.OVSX_PAT != ''
+        run: npx --yes ovsx@0 publish ./*.vsix --pat "$OVSX_PAT"
+      - name: Publish to VS Code Marketplace
+        if: env.VSCE_PAT != ''
+        run: npx --yes @vscode/vsce@3 publish --packagePath ./*.vsix --pat "$VSCE_PAT"

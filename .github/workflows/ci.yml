@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generated files are up to date
+        run: python tools/generate_themes.py --check
+      - name: Contrast
+        run: python tools/check_contrast.py
+      - name: No Italics and High Contrast parity
+        run: python tools/check_parity.py
+      - name: Key parity across themes
+        run: python tools/check_keys.py
+      - name: Version and theme list consistency
+        run: python tools/check_release.py
