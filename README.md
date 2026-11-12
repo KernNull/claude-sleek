@@ -54,13 +54,14 @@ Every screenshot shows [`demo/showcase.py`](demo/showcase.py) in VSCodium with t
 - Tuned syntax for Markdown, JSON, YAML, HTML, CSS/SCSS, TypeScript, Python, Rust, Go, C/C++, Java, PHP, Ruby, shell, TOML/INI, SQL, Dockerfile, XML, diff and regular expressions.
 - Styled sticky scroll, outline and symbol icons, notebooks, tests, settings editor, source control graph, merge editor, debug console and chat panels.
 - Full 16-color terminal palette, readable in every theme (including "black" text and dim ANSI text).
+- Matching Windows Terminal color schemes (see below).
 - Text colors checked against WCAG contrast: 4.5:1 for text, 3:1 for line numbers and icons, and 7:1 for text in the High Contrast themes.
 
 ## Install
 
 **VSCodium / any editor using Open VSX:** open the Extensions view and search for **Claude Sleek**.
 
-**From a VSIX:** download `claude-sleek-2.0.0.vsix` from the Releases page, then Extensions view, `...` menu, **Install from VSIX...**.
+**From a VSIX:** download `claude-sleek-2.1.1.vsix` from the Releases page, then Extensions view, `...` menu, **Install from VSIX...**.
 
 **Manually:** copy this folder into your extensions folder (`%USERPROFILE%\.vscode-oss\extensions\` for VSCodium, `~/.vscode/extensions/` for VS Code) and restart.
 
@@ -112,6 +113,16 @@ Use these colors for the same keys. Each one already clears 4.5:1 contrast in th
 
 The key must match the theme name exactly, so the override above only affects Claude Ember. If you use another variant, repeat the block under its own key, such as `"[Claude Ember Black]"`, `"[Claude Parchment]"` or `"[Claude Ember (No Italics)]"`. The High Contrast themes are best left as they are, since changing their accent can drop them below 7:1.
 
+## Windows Terminal
+
+Matching color schemes for Windows Terminal live in [`terminals/windows-terminal/claude-sleek.json`](terminals/windows-terminal/claude-sleek.json). They are not part of the extension, so there is nothing to install from the marketplace.
+
+1. Open Windows Terminal, then Settings, then **Open JSON file**.
+2. Copy the objects from the `"schemes"` array in `claude-sleek.json` into the `"schemes"` array in your settings (create the array if it is missing).
+3. Set `"colorScheme": "Claude Ember"` on a profile, or under `"profiles"` then `"defaults"` to use it everywhere.
+
+Available schemes: `Claude Ember`, `Claude Ember Black`, `Claude Parchment`, `Claude Ember High Contrast` and `Claude Parchment High Contrast`.
+
 ## Palette
 
 | Role | Ember | Parchment |
@@ -140,6 +151,8 @@ python tools/check_contrast.py          # check every theme for valid colors and
 python tools/check_parity.py            # check each No Italics theme matches its parent
 python tools/check_keys.py              # check every theme defines the same keys
 python tools/check_release.py           # check the version and theme list agree everywhere
+python tools/generate_terminals.py      # rebuild the Windows Terminal schemes in terminals/
+python tools/generate_terminals.py --check # fail if the committed schemes differ from the generator output
 ```
 
 GitHub Actions runs all of these on every push and pull request.

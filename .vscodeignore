@@ -5,6 +5,7 @@
 images/**
 demo/**
 tools/**
+terminals/**
 assets/**
 **/__pycache__/**
 *.vsix

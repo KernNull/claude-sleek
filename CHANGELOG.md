@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.1.1
+
+This release folds the planned 2.0.1 follow-up and the planned 2.1.0 feature work into one upload. Neither 2.0.1 nor 2.1.0 was ever published. The follow-up had no code changes to ship on its own (see Notes), and the one new feature is additive, so two uploads would have been churn. It is numbered 2.1.1 to mark it as the release that covers both of those plans.
+
+No theme colors changed. The extension itself is unchanged apart from its version, README and CHANGELOG, so the VSIX behaves exactly like 2.0.0.
+
+### Added
+- **Windows Terminal color schemes**: `terminals/windows-terminal/claude-sleek.json` holds five schemes (Claude Ember, Claude Ember Black, Claude Parchment, Claude Ember High Contrast, Claude Parchment High Contrast). They use the same ANSI palettes the editor terminal uses, so the contrast already checked for the VS Code themes applies to them.
+- `tools/generate_terminals.py`: generates that file from the palettes in `tools/generate_themes.py`, with a `--check` mode. Windows Terminal ignores alpha in schemes, so the translucent selection color is pre-blended over the background.
+- A CI and release step that fails if the committed Windows Terminal file differs from the generator output.
+- README: a Windows Terminal section and the new development commands.
+
+### Changed
+- `.vscodeignore` excludes `terminals/`, so the Windows Terminal files live in the GitHub repository and are not bundled into the VSIX.
+
+### Notes
+- The No Italics themes have no Windows Terminal scheme, because they use identical colors and a terminal color scheme has no italics. That is five schemes for eight themes.
+- The newer interface keys from 2.0.0 are still unchecked against the editor's own schema validation. This release does not change that.
+- Not included on purpose: more language syntax rules and a colorblind-safety check. They need testing in a real editor, and guessing at scope names is how themes get subtly wrong.
+
 ## 2.0.0
 
 The biggest release so far: two High Contrast themes, much wider language and interface coverage, and CI that keeps releases honest.

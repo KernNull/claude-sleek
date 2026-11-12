@@ -2,7 +2,7 @@
   "name": "claude-sleek",
   "displayName": "Claude Sleek",
   "description": "Warm, modern, minimal themes inspired by Claude: Ember (dark), Ember Black (OLED) and Parchment (light), each with a no-italics variant, plus High Contrast versions of Ember and Parchment. Unofficial and not affiliated with Anthropic.",
-  "version": "2.0.0",
+  "version": "2.1.1",
   "publisher": "kernnull",
   "license": "MIT",
   "icon": "icon.png",

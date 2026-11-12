@@ -26,6 +26,7 @@ jobs:
       - name: Checks
         run: |
           python tools/generate_themes.py --check
+          python tools/generate_terminals.py --check
           python tools/check_contrast.py
           python tools/check_parity.py
           python tools/check_keys.py
